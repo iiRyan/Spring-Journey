@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class StudentCrudApplication {
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(StudentCrudApplication.class, args);
 	}
@@ -17,8 +18,18 @@ public class StudentCrudApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(StudentDAO studentDAO){
 		return runner -> {
-			createStudent(studentDAO);
+			//createStudent(studentDAO);
+			readStudent(studentDAO);
 		};
+	}
+
+	private void readStudent(StudentDAO studentDAO) {
+
+		// retrieve student based on the id
+		System.out.println("Retrieving the student by id... ");
+		Student myStudent = studentDAO.findById(2);
+		// display student
+		System.out.println("Found the student: "+myStudent);
 	}
 
 	private void createStudent(StudentDAO studentDAO) {
