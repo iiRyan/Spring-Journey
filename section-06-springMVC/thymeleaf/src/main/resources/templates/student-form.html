@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Registration Form</title>
+
+    <!-- Css File  -->
+    <link rel="stylesheet" th:href="@{/css/demo.css}"/>
+
+
+</head>
+<body>
+
+<h2>Student Registration Form</h2>
+
+
+<i>Fill out the form. Asterisk (*) means required.</i>
+    <form th:action="@{/processStudentForm}" th:object="${student}" method="POST">
+        <label>
+            First name:
+            <input type="text" th:field="*{firstName}"/>
+        </label>
+    <br><br>
+        <label>
+            Last name (*):
+            <input type="text" th:field="*{lastName}"/>
+        </label>
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="errors"></span>
+        <br><br>
+            Contry:
+        <label>
+            <select th:field="*{country}">
+
+                <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}">  </option>
+            </select>
+        </label>
+        <br><br>
+
+        <input type="submit" value="submit"/>
+    </form>
