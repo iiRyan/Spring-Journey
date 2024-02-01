@@ -17,6 +17,9 @@
     <h1> Student Information </h1>
     <br>
     <p>Student name: <span th:text="${student.firstName} + ' ' + ${student.lastName}  + ' ' + ${student.country} " ></span></p>
+    <br><br>
+
+    Free Passes: <span th:text="${student.freePass}"></span>
 
 </body>
 </html>

@@ -18,26 +18,34 @@
 
 
 <i>Fill out the form. Asterisk (*) means required.</i>
-    <form th:action="@{/processStudentForm}" th:object="${student}" method="POST">
-        <label>
-            First name:
-            <input type="text" th:field="*{firstName}"/>
-        </label>
+<form th:action="@{/processStudentForm}" th:object="${student}" method="POST">
+    <label>
+        First name:
+        <input type="text" th:field="*{firstName}"/>
+    </label>
     <br><br>
-        <label>
-            Last name (*):
-            <input type="text" th:field="*{lastName}"/>
-        </label>
-        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="errors"></span>
-        <br><br>
-            Contry:
-        <label>
-            <select th:field="*{country}">
+    <label>
+        Last name (*):
+        <input type="text" th:field="*{lastName}"/>
+    </label>
+    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="errors"></span>
+    <br><br>
+    Contry:
+    <label>
+        <select th:field="*{country}">
 
-                <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}">  </option>
-            </select>
-        </label>
-        <br><br>
+            <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}"></option>
+        </select>
+    </label>
+    <br><br>
+    Free Pass:
+    <label>
+    <input type="text" th:field="*{freePass}" />
+    </label>
+    <!-- add error message if present -->
+    <span th:if="${#fields.hasErrors('freePass')}" th:errors="*{freePass}" class="errors"></span>
 
-        <input type="submit" value="submit"/>
-    </form>
+    <br><br>
+
+    <input type="submit" value="submit"/>
+</form>
