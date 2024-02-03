@@ -8,7 +8,7 @@ public class SpringBootTodoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootTodoApplication.class, args);
-		System.out.println("App is runnig...");
+		System.out.println("App is running...");
 	}
 
 }
