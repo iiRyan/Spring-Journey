@@ -39,7 +39,7 @@ public class DemoSecurityConfig {
                 .anyRequest()
                 .authenticated())
                 .formLogin(form -> // We are customizing the form login process.
-                form.loginPage("/showMyLoginPage") // The controller
+                form.loginPage("/showLoginPage") // The controller
                         .loginProcessingUrl("/authenticationTheUser") // Login form should POST data to this URL for
                                                                       // processing.
                         .permitAll() // Allow everyone to see login page no need to be logged in.
