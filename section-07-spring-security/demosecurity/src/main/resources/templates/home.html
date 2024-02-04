@@ -1,13 +1,50 @@
-<!DOCTYPE html>
-<html lang="en" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extra/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spring Security</title>
 </head>
+
 <body>
     <h2>MOD WELCOME! Hey </h2>
     <hr>
     <h3>this is blah blah blah...</h3>
+
+    <hr>
+
+
+    <!-- Display user name and role -->
+    <p>
+        User: <span sec:authentication="principal.username"></span>
+        <br><br>
+
+        Role(s): <span sec:authentication="principal.authorities"></span>
+    </p>
+    <hr>
+
+    <!-- ! only show this to MANAGER ROLE  -->
+    <div sec:authorize="hasRole('MANAGER')">
+        <!-- ? Add a link to point to/leaders .. this is for the managers -->
+        <p>
+            <a th:href="@{/leaders}">Leadership Meeting</a>
+            (Only for Manager peeps)
+        </p>
+    </div>
+
+    <!-- ! Only show this to SYSTEM ADMIN ROLE -->
+    <div sec:authorize="hasRole('ADMIN')">
+        <!-- ? Add a link to point to/system .. this is for the system admins -->
+        <p>
+            <a th:href=" @{/systems}">Leadership Meeting</a>
+            (Only for Manager peeps)
+        </p>
+    </div>
+
+
+    <form action="#" th:action="@{/logout}" method="POST">
+        <input type="submit" value="Logout" />
+    </form>
 </body>
+
 </html>

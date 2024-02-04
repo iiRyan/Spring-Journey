@@ -11,39 +11,51 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class DemoSecurityConfig {
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager() {
-        UserDetails john = User.builder()
-                .username("john")
-                .password("{noop}test123")
-                .roles("EMPLOYEE")
-                .build();
-        UserDetails mary = User.builder()
-                .username("mary")
-                .password("{noop}test123")
-                .roles("EMPLOYEE", "MANAGER")
-                .build();
-        UserDetails susan = User.builder()
-                .username("susan")
-                .password("{noop}test123")
-                .roles("EMPLOYEE", "MANAGER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(john, mary, susan);
-    }
+        @Bean
+        public InMemoryUserDetailsManager userDetailsManager() {
+                UserDetails john = User.builder()
+                                .username("john")
+                                .password("{noop}test123")
+                                .roles("EMPLOYEE")
+                                .build();
+                UserDetails mary = User.builder()
+                                .username("mary")
+                                .password("{noop}test123")
+                                .roles("EMPLOYEE", "MANAGER")
+                                .build();
+                UserDetails susan = User.builder()
+                                .username("susan")
+                                .password("{noop}test123")
+                                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                                .build();
+                return new InMemoryUserDetailsManager(john, mary, susan);
+        }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(configurer -> configurer
-                // Any request to the app must be authenticated.
-                .anyRequest()
-                .authenticated())
-                .formLogin(form -> // We are customizing the form login process.
-                form.loginPage("/showLoginPage") // The controller
-                        .loginProcessingUrl("/authenticationTheUser") // Login form should POST data to this URL for
-                                                                      // processing.
-                        .permitAll() // Allow everyone to see login page no need to be logged in.
-                );
-        return http.build();
-    }
+                http.authorizeHttpRequests(configurer -> configurer
+                                // * Any request to the app must be authenticated.
+                                .requestMatchers("/").hasRole("EMPLOYEE") // * The "**" means all subdirectory
+                                .requestMatchers("/leaders/**").hasRole("MANAGER")
+                                .requestMatchers("/systems/**").hasRole("ADMIN")
+                                .anyRequest()
+                                .authenticated())
+                                .formLogin(form -> // * We are customizing the form login process.
+                                form.loginPage("/showLoginPage") // * specifies the path to the login page.
+                                                .loginProcessingUrl("/authenticationTheUser") // * Login form should
+                                                                                              // * POST data to this URL
+                                                                                              // * for
+
+                                                .permitAll() // * Allow everyone to see login page no need to be logged
+                                                             // in
+
+                                )
+                                .logout(logout -> logout.permitAll()// * Invalidate user's HTTP session and remove
+                                                                    // * session cookies.
+                                )
+                                .exceptionHandling(configurer -> configurer.accessDeniedPage("/access-denied"));
+
+                return http.build();
+        }
 }
