@@ -1,0 +1,25 @@
+body{
+    font-style:italic;
+    background: #f2f2f2;
+}
+
+.happy{
+    background-color: #252525;
+    color: #f2f2f2;
+}
+
+.bg-success-lighter {
+    background-color: rgb(185, 245, 190) !important; /* LightGreen */
+}
+
+.bg-warning-lighter {
+    background-color: bisque !important; /* LightGreen */
+}
+
+a{
+    text-decoration: none;
+}
+
+.error{
+    color: red;
+}
