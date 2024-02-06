@@ -9,13 +9,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+// 1- annotate the class as an entity and map to db table.
 @Entity
 @Table(name = "instructor")
 public class Instructor {
+
+    // 2- annotation the fields with db column names
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,6 +82,12 @@ public class Instructor {
 
     public void setInstructorDetail(InstructorDetail instructorDetail) {
         this.instructorDetail = instructorDetail;
+    }
+
+    @Override
+    public String toString() {
+        return "Instructor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+                + "]";
     }
 
 }

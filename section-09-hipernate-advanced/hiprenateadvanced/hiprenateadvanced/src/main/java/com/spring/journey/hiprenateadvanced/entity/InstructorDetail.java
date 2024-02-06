@@ -6,28 +6,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 // 1- annotate the class as an entity and map to db table.
-
+// 2- define the fields
 // 3- annotation the fields with db column names
-
 // 4- create constructors
-
-// 5- generate getter&setter methods
-
-// 6- generate toString method
+// 5- generate toString method
 
 @Entity
 @Table(name = "instructor_detail")
 public class InstructorDetail {
-
-    // 2- define the fields
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +30,23 @@ public class InstructorDetail {
     @Column(name = "hobby")
     private String hobby;
 
-    // 7- set the mapping to InstructorDetails entity.
+    public InstructorDetail(String youtubeChannel, String hobby) {
+        this.youtubeChannel = youtubeChannel;
+        this.hobby = hobby;
 
-    @OneToOne(mappedBy = "instructorDetail", cascade = CascadeType.ALL)
+    }
+
+    public InstructorDetail() {
+    }
+
+    // ! Refers to"instructorDetail" property in "Instructor" class/entity.
+    /*
+     * CascadeType.ALL - to choose all types. here we choose all except remove
+     * because we want to keep the Instructor record when we delete the instructor
+     * detail.
+     */
+    @OneToOne(mappedBy = "instructorDetail", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH })
     private Instructor instructor;
 
     public Instructor getInstructor() {
@@ -51,15 +55,6 @@ public class InstructorDetail {
 
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
-    }
-
-    public InstructorDetail(String youtubeChannel, String hobby) {
-        this.youtubeChannel = youtubeChannel;
-        this.hobby = hobby;
-
-    }
-
-    public InstructorDetail() {
     }
 
     public int getId() {
@@ -84,6 +79,11 @@ public class InstructorDetail {
 
     public void setHobby(String hobby) {
         this.hobby = hobby;
+    }
+
+    @Override
+    public String toString() {
+        return "InstructorDetail [id=" + id + ", youtubeChannel=" + youtubeChannel + ", hobby=" + hobby + "]";
     }
 
 }
