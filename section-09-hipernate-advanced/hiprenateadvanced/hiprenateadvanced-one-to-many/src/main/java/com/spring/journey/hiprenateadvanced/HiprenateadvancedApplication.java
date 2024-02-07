@@ -70,10 +70,10 @@ public class HiprenateadvancedApplication {
 	private void createInstructor(AppDAO appDAO) {
 
 		// Create Instructor.
-		Instructor tempInstructor = new Instructor("Saad", "Mohammed",
-				"Mohammed@gmail.com");
+		Instructor tempInstructor = new Instructor("Majed", "nasser",
+				"majed@gmail.com");
 		// create the instructor details
-		InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.google.com", "Guitar");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.google.com", "GaolKeeper");
 
 		// associate the objects
 
