@@ -1,12 +1,16 @@
 package com.spring.journey.hiprenateadvanced.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.spring.journey.hiprenateadvanced.entity.Course;
 import com.spring.journey.hiprenateadvanced.entity.Instructor;
 import com.spring.journey.hiprenateadvanced.entity.InstructorDetail;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 @Repository
 public class AppDAOImpl implements AppDAO {
@@ -15,23 +19,23 @@ public class AppDAOImpl implements AppDAO {
 
     // inject entity manager using constructor injection.
 
-    private EntityManager thEntityManager;
+    private EntityManager entityManager;
 
-    public AppDAOImpl(EntityManager thEntityManager) {
-        this.thEntityManager = thEntityManager;
+    public AppDAOImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Transactional
     @Override
     public void save(Instructor theInstructor) {
-        thEntityManager.persist(theInstructor);
+        entityManager.persist(theInstructor);
 
     }
 
     @Override
     public Instructor findInstructorById(int theInt) {
 
-        return thEntityManager.find(Instructor.class, theInt);
+        return entityManager.find(Instructor.class, theInt);
     }
 
     @Transactional
@@ -42,13 +46,13 @@ public class AppDAOImpl implements AppDAO {
         Instructor theInstructor = findInstructorById(theId);
 
         // Delete theInstructor.
-        thEntityManager.remove(theInstructor);
+        entityManager.remove(theInstructor);
     }
 
     @Override
     public InstructorDetail findInstructorDetailById(int theId) {
 
-        return thEntityManager.find(InstructorDetail.class, theId);
+        return entityManager.find(InstructorDetail.class, theId);
     }
 
     @Transactional
@@ -63,7 +67,20 @@ public class AppDAOImpl implements AppDAO {
         theInstructorDetail.getInstructor().setInstructorDetail(null);
 
         // Delete the theInstructorDetail
-        thEntityManager.remove(theInstructorDetail);
+        entityManager.remove(theInstructorDetail);
+    }
+
+    @Override
+    public List<Course> findCoursesByInstructorId(int theId) {
+
+        // Create query
+        TypedQuery<Course> query = entityManager.createQuery("FROM Course WHERE instructor.id = :data", Course.class);
+        query.setParameter("data", theId);
+
+        // execute query
+        List<Course> coursesList = query.getResultList();
+
+        return coursesList;
     }
 
 }

@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import java.util.*;
 
 import com.spring.journey.hiprenateadvanced.dao.AppDAO;
 import com.spring.journey.hiprenateadvanced.entity.Course;
@@ -13,7 +14,8 @@ import com.spring.journey.hiprenateadvanced.entity.InstructorDetail;
 @SpringBootApplication
 public class HiprenateadvancedApplication {
 
-	private int theId = 6;
+	private int theId = 1;
+	private int courseId = 10;
 
 	private AppDAO appDAO;
 
@@ -32,7 +34,7 @@ public class HiprenateadvancedApplication {
 			System.out.println("App is Running...");
 
 			/* Instructor Methods */
-			// createInstructor(appDAO);
+			// createInstructor();
 			// findInstructor(appDAO,theId);
 			// deleteInstructor(appDAO,theId);
 
@@ -42,26 +44,40 @@ public class HiprenateadvancedApplication {
 
 			/* Course Methods */
 			// createInstructorWithCourses(appDAO);
-			findInstructorWithCourses();
+			// findInstructorWithCourses();
+			findCoursesForInstructor();
 
 		};
 	}
 
+	private void findCoursesForInstructor() {
+
+		// Retrieve the Instructor.
+		Instructor temInstructor = findInstructor(theId);
+		// find courses associated with the instructor.
+		List<Course> theCourseList = appDAO.findCoursesByInstructorId(theId);
+		// associate the objects.
+		temInstructor.setCourses(theCourseList);
+		System.out.println("The Associated Courses: " + temInstructor.getCourses());
+
+		System.out.println("Done!");
+	}
+
 	private void findInstructorWithCourses() {
 
-		Instructor temInstructor = findInstructor(appDAO, theId);
+		Instructor temInstructor = findInstructor(theId);
 		System.out.println("The Associated Courses: " + temInstructor.getCourses());
 		System.out.println("Done!");
 
 	}
 
-	private void createInstructorWithCourses(AppDAO appDAO) {
+	private void createInstructorWithCourses() {
 
 		// Create Instructor.
-		Instructor tempInstructor = new Instructor("Sussan", "DISCA",
-				"sussan@gmail.com");
+		Instructor tempInstructor = new Instructor("Fahad", "Saleh",
+				"fahad@gmail.com");
 		// create the instructor details
-		InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.google.com", "Dance");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.google.com", "Football");
 
 		// associate the objects
 		tempInstructor.setInstructorDetail(tempInstructorDetail);
@@ -90,7 +106,7 @@ public class HiprenateadvancedApplication {
 		System.out.println("DONE!");
 	}
 
-	private void findInstructorDetail(AppDAO appDAO, int theId) {
+	private void findInstructorDetail(int theId) {
 
 		// get the instructor details object
 		InstructorDetail thInstructorDetail = appDAO.findInstructorDetailById(theId);
@@ -100,14 +116,14 @@ public class HiprenateadvancedApplication {
 		System.out.println("The Associated instructor: " + thInstructorDetail.getInstructor());
 	}
 
-	private void deleteInstructor(AppDAO appDAO, int theId) {
+	private void deleteInstructor(int theId) {
 
 		System.out.println("Deleting instructor id: " + theId);
 		appDAO.deleteInstructorById(theId);
 		System.out.println("DONE!");
 	}
 
-	private Instructor findInstructor(AppDAO appDAO, int theId) {
+	private Instructor findInstructor(int theId) {
 
 		System.out.println("Finding instructor id: " + theId);
 		Instructor theInstructor = appDAO.findInstructorById(theId);
@@ -124,13 +140,13 @@ public class HiprenateadvancedApplication {
 		System.out.println("DONE!");
 	}
 
-	private void createInstructor(AppDAO appDAO) {
+	private void createInstructor() {
 
 		// Create Instructor.
-		Instructor tempInstructor = new Instructor("Sussan", "DISCA",
-				"sussan@gmail.com");
+		Instructor tempInstructor = new Instructor("Ali", "Mumhood",
+				"ali@gmail.com");
 		// create the instructor details
-		InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.google.com", "Dance");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.google.com", "Video Game");
 
 		// associate the objects
 		tempInstructor.setInstructorDetail(tempInstructorDetail);
