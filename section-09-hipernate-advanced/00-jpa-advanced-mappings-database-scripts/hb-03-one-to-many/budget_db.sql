@@ -7,11 +7,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema budget_db
 -- -----------------------------------------------------
@@ -20,17 +15,6 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- Schema budget_db
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `budget_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `mydb` ;
-
--- -----------------------------------------------------
--- Table `mydb`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`user` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
 USE `budget_db` ;
 
 -- -----------------------------------------------------
@@ -43,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `budget_db`.`user` (
   `password` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -56,14 +40,14 @@ CREATE TABLE IF NOT EXISTS `budget_db`.`budget` (
   `income` DECIMAL(10,0) NULL DEFAULT NULL,
   `month` VARCHAR(12) NULL DEFAULT NULL,
   `user_id` INT NULL DEFAULT NULL,
-  `total_expense` DECIMAL(10,0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
   INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `budget_db`.`user` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -77,22 +61,14 @@ CREATE TABLE IF NOT EXISTS `budget_db`.`expense` (
   `description` VARCHAR(50) NULL DEFAULT NULL,
   `bank_account` VARCHAR(45) NULL DEFAULT NULL,
   `paid` TINYINT NULL DEFAULT NULL,
-  `total` INT NULL DEFAULT NULL,
-  `user_id` INT NULL DEFAULT NULL,
   `budget_id` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
   INDEX `budget_id_idx` (`budget_id` ASC) VISIBLE,
   CONSTRAINT `budget_id`
     FOREIGN KEY (`budget_id`)
-    REFERENCES `budget_db`.`budget` (`id`),
-  CONSTRAINT `user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `budget_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `budget_db`.`budget` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -110,10 +86,23 @@ CREATE TABLE IF NOT EXISTS `budget_db`.`category` (
     FOREIGN KEY (`expense_id`)
     REFERENCES `budget_db`.`expense` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+USE `budget_db` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `budget_db`.`userexpenses`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `budget_db`.`userexpenses` (`id` INT, `amount` INT, `description` INT, `bank_account` INT, `paid` INT, `budget_id` INT);
+
+-- -----------------------------------------------------
+-- View `budget_db`.`userexpenses`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `budget_db`.`userexpenses`;
+USE `budget_db`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `budget_db`.`userexpenses` AS select `e`.`id` AS `id`,`e`.`amount` AS `amount`,`e`.`description` AS `description`,`e`.`bank_account` AS `bank_account`,`e`.`paid` AS `paid`,`e`.`budget_id` AS `budget_id` from (`budget_db`.`expense` `e` join `budget_db`.`budget` `b` on((`e`.`budget_id` = `b`.`id`))) where (`b`.`user_id` = 1);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
